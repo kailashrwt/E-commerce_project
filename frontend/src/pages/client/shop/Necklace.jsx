@@ -1,0 +1,119 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { Diamond } from "lucide-react";
+import { FlashIcon } from "../../../components/Icons";
+
+const Necklace = ({ theme = "light" }) => {
+  const isDark = theme === "dark";
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchNecklace = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:6060/api/products/category/Necklace"
+        );
+
+        if (res.data.success) {
+          setProducts(res.data.products);
+        }
+      } catch (err) {
+        console.error("Necklace Fetch Error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchNecklace();
+  }, []);
+
+  if (loading)
+    return (
+      <div className="flex justify-center items-center min-h-[50vh] text-xl">
+        Loading Necklace...
+      </div>
+    );
+
+  return (
+    <div
+      className="px-4 sm:px-6 md:px-10 py-6"
+      style={{
+        background: isDark ? "#0F172A" : "#F8FAFC",
+        minHeight: "90vh",
+        color: isDark ? "white" : "black",
+        transition: "0.3s",
+      }}
+    >
+      {/* HEADER */}
+      <h1 className="text-2xl sm:text-3xl font-bold mb-8 text-center flex items-center justify-center gap-2">
+        💎 Necklace Collection
+        <Diamond className="w-6 h-6 sm:w-8 sm:h-8" />
+      </h1>
+
+      {/* If no products found */}
+      {products.length === 0 ? (
+        <p className="text-center text-gray-500">
+          No Necklace products found.
+        </p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {products.map((item) => (
+            <div
+              key={item._id}
+              className="shadow-lg rounded-xl p-4 hover:scale-[1.03] transition-all cursor-pointer"
+              style={{
+                background: isDark ? "#1E293B" : "#ffffff",
+                border: isDark ? "1px solid #334155" : "1px solid #e2e8f0",
+              }}
+            >
+              {/* Product Image */}
+              <img
+                src={`http://localhost:6060${item.image}`}
+                alt={item.name}
+                className="w-full h-48 sm:h-56 md:h-60 object-cover rounded-lg mb-4"
+              />
+
+              {/* Product Name */}
+              <h2 className="text-lg sm:text-xl font-bold">{item.name}</h2>
+              <p className="text-sm opacity-80">{item.category}</p>
+
+              {/* Price */}
+              <p className="text-xl font-semibold text-green-500 mt-2">
+                ₹{item.price}
+              </p>
+
+              {/* View Details Button */}
+              <button
+                onClick={() => navigate(`/product/${item._id}`)}
+                className="mt-4 w-full py-2 rounded-lg text-white font-semibold text-sm sm:text-base"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #4ECDC4 0%, #2DD4BF 100%)",
+                }}
+              >
+                View Details
+              </button>
+
+              {/* Buy Now Button */}
+              <button
+                onClick={() => navigate(`/payment?productId=${item._id}`)}
+                className="mt-2 w-full py-2 rounded-lg text-white font-semibold flex items-center justify-center gap-2 text-sm sm:text-base"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #FF6B6B 0%, #FF8E8E 100%)",
+                }}
+              >
+                <FlashIcon className="w-5 h-5 sm:w-6 sm:h-6" /> Buy Now
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Necklace;

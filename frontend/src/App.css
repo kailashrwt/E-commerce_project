@@ -1,0 +1,58 @@
+/* CSS Variables for Theme */
+:root {
+  --bg-primary: #F8FAFC;
+  --text-primary: #0F172A;
+  --card-bg: #FFFFFF;
+  --border-color: rgba(15, 23, 42, 0.1);
+}
+
+.dark {
+  --bg-primary: #0F172A;
+  --text-primary: #F8FAFC;
+  --card-bg: #1E293B;
+  --border-color: rgba(248, 250, 252, 0.1);
+}
+
+/* Apply theme to entire page */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Smooth transitions for theme switching */
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-primary);
+  opacity: 0.5;
+}
+
+/* Global styles */
+.min-h-screen {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Ensure all pages inherit theme */
+.page-container {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
