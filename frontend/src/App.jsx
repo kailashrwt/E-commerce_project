@@ -51,7 +51,7 @@ import GiftUnder2000 from "./pages/client/gifts/GiftUnder2000";
 import Gift2100To3500 from "./pages/client/gifts/Gift2100To3500";
 import Sale from "./pages/Sale";
 import MyOrders from "./pages/MyOrders";
-import Gift3600To5000 from "./pages/client/gifts/gift3600to5000";
+import Gift3600To5000 from "./pages/client/gifts/Gift3600to5000";
 
 
 
