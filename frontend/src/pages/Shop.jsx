@@ -8,18 +8,18 @@ const Shop = ({ theme = "light", setCartCount }) => {
   const [products, setProducts] = useState([]);
   const location = useLocation();
 
-  // 🔍 Read ?search= query
+  const API = import.meta.env.VITE_API_URL;   // <--- 🔥 Base URL
+
+  // Read query
   const queryParams = new URLSearchParams(location.search);
   const searchQuery = queryParams.get("search")?.toLowerCase() || "";
 
-  // 🔹 Load all products
+  // Load Products from LIVE backend
   useEffect(() => {
     const loadProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:6060/api/products");
-        if (res.data.success) {
-          setProducts(res.data.products);
-        }
+        const res = await axios.get(`${API}/api/products`);
+        if (res.data.success) setProducts(res.data.products);
       } catch (err) {
         console.log("Shop Load Error:", err);
       }
@@ -27,26 +27,22 @@ const Shop = ({ theme = "light", setCartCount }) => {
     loadProducts();
   }, []);
 
-  // 🔎 Filter Logic
+  // Filter Logic
   const filteredProducts = products.filter((p) =>
     p.name.toLowerCase().includes(searchQuery)
   );
 
-  // 🛒 Add to Cart
+  // ADD to cart
   const handleAddToCart = async (productId) => {
     const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Please login first!");
-      return;
-    }
+    if (!token) return alert("Please login first!");
 
     try {
       const res = await axios.post(
-        "http://localhost:6060/api/cart/add",
+        `${API}/api/cart/add`,
         { productId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-
       if (res.data.success) {
         alert("Added to Cart!");
         setCartCount((prev) => prev + 1);
@@ -66,7 +62,6 @@ const Shop = ({ theme = "light", setCartCount }) => {
         minHeight: "100vh",
       }}
     >
-      {/* Title */}
       <div className="text-center mb-12">
         <h1 className="text-4xl font-extrabold mb-3">🛍️ Explore Our Collection</h1>
         <p className="opacity-70 font-medium">
@@ -74,58 +69,38 @@ const Shop = ({ theme = "light", setCartCount }) => {
         </p>
       </div>
 
-      {/* Products Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
 
-        {/* ❌ No Results */}
         {filteredProducts.length === 0 ? (
           <div className="col-span-4 text-center text-gray-500 py-20 text-xl font-semibold">
             ❌ No products found for: <span className="font-bold">"{searchQuery}"</span>
           </div>
         ) : (
           filteredProducts.map((item) => (
-            <div
-              key={item._id}
-              className="rounded-xl p-4 shadow-lg hover:scale-105 transition transform duration-300 cursor-pointer"
-              style={{
-                background: isDark ? "#1E293B" : "#ffffff",
-              }}
-            >
-              {/* Image */}
+            <div key={item._id} className="rounded-xl p-4 shadow-lg hover:scale-105 transition">
               <div className="w-full h-56 overflow-hidden rounded-lg">
                 <img
-                  src={`http://localhost:6060${item.image}`}
+                  src={`${API}${item.image}`}      // <--- IMAGE URL FIXED 🔥
                   alt={item.name}
-                  className="w-full h-full object-cover hover:scale-110 transition duration-300"
+                  className="w-full h-full object-cover hover:scale-110 transition"
                 />
               </div>
 
-              {/* Info */}
               <div className="mt-4">
                 <h2 className="text-xl font-semibold mb-1">{item.name}</h2>
                 <p className="text-sm opacity-70">{item.category}</p>
-
-                <p className="text-lg font-bold mt-2 text-green-500">
-                  ₹ {item.price}
-                </p>
+                <p className="text-lg font-bold mt-2 text-green-500">₹ {item.price}</p>
 
                 <button
                   onClick={() => handleAddToCart(item._id)}
-                  className="mt-4 w-full py-2 rounded-lg font-semibold"
-                  style={{
-                    background:
-                      "linear-gradient(135deg, #4ECDC4 0%, #2DD4BF 100%)",
-                    color: "#fff",
-                    boxShadow: "0 4px 12px rgba(78,205,196,0.3)",
-                  }}
+                  className="mt-4 w-full py-2 rounded-lg font-semibold bg-teal-400 text-white"
                 >
-                  Add to Cart <CartIcon  className="w-8 h-8 "/>
+                  Add to Cart <CartIcon className="w-8 h-8"/>
                 </button>
               </div>
             </div>
           ))
         )}
-
       </div>
     </div>
   );
