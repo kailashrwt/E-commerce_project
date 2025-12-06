@@ -64,7 +64,7 @@ const AdminDashboard = lazy(() =>import("./pages/admin/AdminDashboard"));
 
 // Routes list
 const routes = [
-  { path: " https://kailashrwt.github.io/E-commerce_project/", component: Home },
+  { path: "/", component: Home },
   { path: "/login", component: Login },
   { path: "/register", component: Register },
   {path: "/addtocart", component: AddToCart},
@@ -271,7 +271,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <Router>
+      <Router basename="/E-commerce_project">
         <ScrollToTop />
         <LayoutWrapper
           theme={theme}
