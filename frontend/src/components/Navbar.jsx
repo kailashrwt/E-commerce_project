@@ -32,7 +32,7 @@ export default function NavbarResponsive({
 
   // Links & dropdown items (kept from your original)
   const links = [
-    { path: "/", label: "Home", icon: <HomeIcon /> },
+    { path: "https://kailashrwt.github.io/E-commerce_project/", label: "Home", icon: <HomeIcon /> },
     { path: "/shop", label: "Shop", icon: <ShoppingBagIcon />, dropdown: true },
     { path: "/flavors", label: "Flavors", icon: <IceCream />, dropdown: true },
     { path: "/sorbetgirl", label: "Sorbet Girl", icon: <GirlIcon /> , dropdown: true },
